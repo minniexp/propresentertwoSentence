@@ -10,6 +10,38 @@
 
 
 prev_text = '';
+	
+/* BELOW is New Section added from original github: https://github.com/calebsurface/ProPresenter-OBS */
+function editProPresenterMessage(message){
+    // Final Output Text
+    let text = "";
+    
+    // If message is one sentence (less than 60 characters)
+    if(message.length< 60) {
+            text = message.replace(/\r\n|\n|\r/g, '')
+            return text
+    }
+    
+    // If message is more than one sentence (greater than 60 characters)
+
+    // find middle index
+    let middle = Math.floor(message.length / 2);
+    let before = message.lastIndexOf('\n', middle);
+    let after = message.indexOf('\n', middle + 1);
+    
+    if (middle - before < after - middle) {
+        middle = before;
+    } else {
+        middle = after;
+    }
+    
+    before= message.substr(0, middle).replace(/\r\n|\n|\r/g, '')
+    after = message.substr(middle + 1).replace(/\r\n|\n|\r/g, '')
+    
+    text = before + "<br />" + after
+    return text
+}
+/* ABOVE is New Section added from original github: https://github.com/calebsurface/ProPresenter-OBS */
 
 function processProPresenterMessage(message) {
 
@@ -87,36 +119,6 @@ function connectToProPresenter() {
     };
 }
 
-/* New Section added from original github: https://github.com/calebsurface/ProPresenter-OBS */
-function editProPresenterMessage(message){
-    // Final Output Text
-    let text = "";
-    
-    // If message is one sentence (less than 60 characters)
-    if(message.length< 60) {
-            text = message.replace(/\r\n|\n|\r/g, '')
-            return text
-    }
-    
-    // If message is more than one sentence (greater than 60 characters)
-
-    // find middle index
-    let middle = Math.floor(message.length / 2);
-    let before = message.lastIndexOf('\n', middle);
-    let after = message.indexOf('\n', middle + 1);
-    
-    if (middle - before < after - middle) {
-        middle = before;
-    } else {
-        middle = after;
-    }
-    
-    before= message.substr(0, middle).replace(/\r\n|\n|\r/g, '')
-    after = message.substr(middle + 1).replace(/\r\n|\n|\r/g, '')
-    
-    text = before + "<br />" + after
-    return text
-}
 
 connectToProPresenter();
 

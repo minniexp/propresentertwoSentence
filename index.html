@@ -17,8 +17,8 @@ function editProPresenterMessage(message){
     let text = "";
     
     // If message is one sentence (less than 60 characters)
-    if(message.length< 60) {
-            text = message.replace(/\r\n|\n|\r/g, '')
+    if(message.length < 35) {
+            text = message.replace(/\r\n|\n|\r/g, ' ')
             return text
     }
     

@@ -35,8 +35,8 @@ function editProPresenterMessage(message){
         middle = after;
     }
     
-    before= message.substr(0, middle).replace(/\r\n|\n|\r/g, '')
-    after = message.substr(middle + 1).replace(/\r\n|\n|\r/g, '')
+    before= message.substr(0, middle).replace(/\r\n|\n|\r/g, ' ')
+    after = message.substr(middle + 1).replace(/\r\n|\n|\r/g, ' ')
     
     text = before + "<br />" + after
     return text

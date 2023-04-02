@@ -16,19 +16,25 @@ function editProPresenterMessage(message){
     // Final Output Text
     let text = "";
     
-    // If message is one sentence (less than 60 characters)
-    if(message.length < 35) {
-            text = message.replace(/\r\n|\n|\r/g, ' ')
-            return text
+    // If there are two lines or less
+    let countNum = (message.match(/\r\n|\n|\r/g)||[]).length;
+    if(countNum<2){
+        text = message.replace(/\r\n|\n|\r/g, '<br />')
+        return text
     }
     
-    // If message is more than one sentence (greater than 60 characters)
+    // If message is more than three lines
 
     // find middle index
     let middle = Math.floor(message.length / 2);
     let before = message.lastIndexOf('\n', middle);
     let after = message.indexOf('\n', middle + 1);
     
+    if(before < 0 || after < 0){
+        before = message.lastIndexOf(' ', middle);
+        after = message.indexOf(' ', middle + 1);
+    }
+
     if (middle - before < after - middle) {
         middle = before;
     } else {

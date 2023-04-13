@@ -1,0 +1,65 @@
+/*
+IF YOU'RE NOT FAMILIAR WITH CSS
+If you aren't familiar/comfortable with CSS, then I'd highly suggest checking out https://www.w3schools.com/css/default.asp
+I use their database of information on a regular bases, and it can help you get the exact look you want on this
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+* {
+    padding: 0;
+    margin: 0;
+    color: white;
+    font-size: 10px;
+    font-family: Montserrat, Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+    text-align: center;
+    overflow: hidden;
+}
+
+#cs {
+    width: 100%;
+    padding: 0.5em 0;
+    font-size: 5em;
+    line-height: 1.6em;
+    letter-spacing: 1px;
+    position: absolute;
+    bottom: 0;
+    text-shadow: 3px 3px 4px black;
+}
+
+.ctw {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  color: white;
+  text-shadow: 0px;
+  width: 96%;         
+  padding: 0em 0.5em;
+  font-size: 5em;
+  line-height: 0.5em;
+  letter-spacing: 1px;
+  position: absolute;
+  bottom: 0;
+}
+
+// ADDED NEW for "Call to worship" Section
+#title{
+  background-color: black;
+  display: inline-flex;
+  color: white;
+  font-weight:bolder;
+  margin-left: 30px;
+  padding-left: 5px;
+  width: 17%;
+  justify-content: center;
+}
+
+#verse{
+  /* border: 2px solid green; */
+  color: black;
+  font-weight: 600;
+  padding: 0px 5px;
+  background-color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 20px;
+}

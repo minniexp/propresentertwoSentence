@@ -65,23 +65,41 @@ function processProPresenterMessage(message) {
 	
             // check slide note for noText keyword.  If noText is defined dont step into this IF
             if (typeof message['ary'][1] !== 'undefined' && message['ary'][1]['txt'] !== config["noText"]) {
-                // replace carriage return \r and linefeed \n with <br> global
-                text = message['ary'][0]['txt'];
-	        text = editProPresenterMessage(text);
-                // if fading is true and repeated text is true
-                if (prev_text !== text || config['fade_repeated_text']) {
-                    // if fading is true
-                    if (config['fade']) {
-                        $("#cs").fadeOut(config["fade_speed"], function() {
+
+                // CALL TO WORSHIP SECTION
+                                                // replace uid with the desired slide
+                if(message['ary'][1]['uid'] === "43C7A5B6-3513-4E57-8A49-3FF6C9AB3DAA"){
+                    console.log("inside call to worship slide");
+                    text = message['ary'][0]['txt'];
+                    let index = text.lastIndexOf("\r");
+                    let title = text.substring(0, index);
+                    let verse = text.substring(index+1);
+                    let editVers = editProPresenterMessage(verse).replace(/\r\n|\n|\r/g, " ");
+                    $("#title").html(title);
+                    $("#verse").html(verse);
+                    $("#cs").html("");
+                }else {
+                    // replace carriage return \r and linefeed \n with <br> global
+                    $("#title").html("");
+                    $("#verse").html("");
+                    text = message['ary'][0]['txt'];
+                    text = editProPresenterMessage(text);
+                    // if fading is true and repeated text is true
+                    if (prev_text !== text || config['fade_repeated_text']) {
+                        // if fading is true
+                        if (config['fade']) {
+                                $("#cs").fadeOut(config["fade_speed"], function() {
+                                $("#cs").html(text);
+                                $("#cs").fadeIn(config["fade_speed"]);
+                            });
+                        }
+                        // no fade
+                        else {
                             $("#cs").html(text);
-                            $("#cs").fadeIn(config["fade_speed"]);
-                        });
-                    }
-                    // no fade
-                    else {
-                        $("#cs").html(text);
+                        }
                     }
                 }
+
             }
             // noText keyword was defined on slide note so set #cs to blank
             else{
@@ -133,6 +151,10 @@ connectToProPresenter();
 
 <body>
     <div id="cs"></div>
+    <div class="ctw">
+        <h2 id="title"></h2>
+        <h2 id="verse"></h2>
+    </div>
 </body>
 
 </html>

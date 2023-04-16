@@ -11,8 +11,7 @@ I use their database of information on a regular bases, and it can help you get 
     margin: 0;
     color: white;
     font-size: 10px;
-    font-family: 'Montserrat', sans-serif;
-    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;   
     text-align: center;
     overflow: hidden;
 }
@@ -26,6 +25,7 @@ I use their database of information on a regular bases, and it can help you get 
     position: absolute;
     bottom: 0;
     text-shadow: 3px 3px 4px black;
+    text-transform: uppercase;
 }
 
 .ctw {
@@ -41,13 +41,14 @@ I use their database of information on a regular bases, and it can help you get 
   letter-spacing: 1px;
   position: absolute;
   bottom: 0;
+  text-transform: none;
     /* With External Image 
   heigth: 30.3%;
     */
-
+    
 }
 
-// ADDED NEW for "Call to worship" Section
+/* ADDED NEW for "Call to worship" Section */
 #title{
   background-color: black;
   display: inline-flex;

@@ -31,6 +31,9 @@ I use their database of information on a regular bases, and it can help you get 
         rgba(0, 0, 0, 0.8) 5%,
         rgb(63, 61, 61) 20%
     );
+    /* If too dark, try this
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 1%, rgb(255, 255, 255) 20%);
+    */
 }
 
 .ctw {

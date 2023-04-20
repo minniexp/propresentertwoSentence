@@ -26,6 +26,11 @@ I use their database of information on a regular bases, and it can help you get 
     bottom: 0;
     text-shadow: 3px 3px 4px black;
     text-transform: uppercase;
+    background: linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.8) 5%,
+        rgb(63, 61, 61) 20%
+    );
 }
 
 .ctw {

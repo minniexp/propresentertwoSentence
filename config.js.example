@@ -9,7 +9,8 @@ var config = {
 	'fade' : true,
 	'fade_speed' : 200, // milliseconds 600 slow, 400 normal, 200 fast
 	'fade_repeated_text' : true, // set true to fade in/out repeated text
-	'noText' : 'no-obs' // use this word in the slide notes to prevent text being sent to OBS
-  'vmix_ip' '10.1.10.XXX', //ip address from vMix Web Controller
-  'vmix_port' : 8088 //port from vMix Web Controller
+	'noText' : 'no-obs', // use this word in the slide notes to prevent text being sent to OBS
+  	'vmix_ip' '10.1.10.XXX', //ip address from vMix Web Controller
+  	'vmix_port' : 8088, //port from vMix Web Controller
+	'ptz_ip': '192.168.1.XXX', // ip address for PTZ Camera
 };

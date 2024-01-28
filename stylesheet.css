@@ -89,3 +89,15 @@ I use their database of information on a regular bases, and it can help you get 
     height: 100%; /* Child height matches the parent container */
     box-sizing: border-box; /* Ensures padding and border are included in the width and height */
 }
+
+.success{
+  background-color: green;
+  color: white;
+  font-weight: 600;
+}
+
+.fail{
+  background-color: red;
+  color: white;
+  font-weight: 600;
+}

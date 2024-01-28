@@ -10,26 +10,38 @@
 
 
 prev_text = '';
-	
+
 /* BELOW is New Section added from original github: https://github.com/calebsurface/ProPresenter-OBS */
 function editProPresenterMessage(message){
     // Final Output Text
     let text = "";
-    
+   
+console.log("TEXT IS: ", message.toString().split(" "))
     // If there are two lines or less
     let countNum = (message.match(/\r\n|\n|\r/g)||[]).length;
     if(countNum<2){
         text = message.replace(/\r\n|\n|\r/g, '<br />')
         return text
     }
-    
+   
     // If message is more than three lines
 
     // find middle index
+if(message.includes('\r')){
+    let middle = message.indexOf('\r');
+    let before = message.lastIndexOf('\r', middle);
+    let after = message.indexOf('\r', middle + 1);
+    before= message.substr(0, middle).replace(/\r\n|\n|\r/g, ' ')
+    after = message.substr(middle + 1).replace(/\r\n|\n|\r/g, ' ')
+    text = before + "<br />" + after
+    console.log("before: ", before);
+    console.log("after: ", after);
+    return text
+}
     let middle = Math.floor(message.length / 2);
     let before = message.lastIndexOf('\n', middle);
     let after = message.indexOf('\n', middle + 1);
-    
+   
     if(before < 0 || after < 0){
         before = message.lastIndexOf(' ', middle);
         after = message.indexOf(' ', middle + 1);
@@ -40,13 +52,71 @@ function editProPresenterMessage(message){
     } else {
         middle = after;
     }
-    
+   
     before= message.substr(0, middle).replace(/\r\n|\n|\r/g, ' ')
     after = message.substr(middle + 1).replace(/\r\n|\n|\r/g, ' ')
-    
+    console.log("before: ", before);
+    console.log("after: ", after);
     text = before + "<br />" + after
     return text
 }
+
+function triggerHTTPRequestPrayer(){
+    console.log("fetching triggerHTTPRequestPrayer")
+    var ptzCameraHTTPURL = 'http://' + config['ptz_ip'] + '/cgi-bin/ptzctrl.cgi?ptzcmd&poscall&1';
+
+    try {
+        fetch(ptzCameraHTTPURL)
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .then($("#camera").addClass("success"));
+    } catch {
+        $("#camera").addClass("fail")
+    }
+
+    // http://127.0.0.1:8088/API/?Function=Fade&Duration=1000&Input=877bb3e7-58bd-46a1-85ce-0d673aec6bf5
+    var vMixWebControllerURL = 'http://' + config['vmix_ip'] + ':' + config['vmix_port'] + '/api/?Function=Merge&Duration=1000&Input=8';
+    // var vMixWebControllerURL = 'http://' + config['vmix_ip'] + ':' + config['vmix_port'] + '/api/?Function=ScriptStart&Value=8';
+
+    // test api call for now - change it to vmix api call 
+    try {
+        fetch(vMixWebControllerURL)
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .then($("#vmix").addClass("success"));
+    } catch {
+        $("#vmix").addClass("fail")
+    }
+
+}
+
+function triggerHTTPRequestAnnouncement(){
+    console.log("fetching triggerHTTPRequestAnnouncement")
+
+    var ptzCameraHTTPURL = 'https://' + config['ptz_ip'] + '/cgi-bin/ptzctrl.cgi?ptzcmd&poscall&8';
+    try {
+        fetch(ptzCameraHTTPURL)
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .then($("#camera").addClass("success"));
+    } catch {
+        $("#camera").addClass("fail")
+    }
+
+    //http://127.0.0.1:8088/api/?Function=SetOverlay&Input=8&Value=2&Transition=Fade&Duration=500
+    // http://127.0.0.1:8088/API/?Function=OverlayInput1In&Input=Web
+    var vMixWebControllerURL = 'http://' + config['vmix_ip'] + ':' + config['vmix_port'] + '/api/?Function=Merge&Duration=1000&Input=8';
+    // test api call for now - change it to vmix api call 
+    try {
+        fetch(vMixWebControllerURL)
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .then($("#vmix").addClass("success"));
+    } catch {
+        $("#vmix").addClass("fail")
+    }
+}
+
 /* ABOVE is New Section added from original github: https://github.com/calebsurface/ProPresenter-OBS */
 
 function processProPresenterMessage(message) {
@@ -57,19 +127,17 @@ function processProPresenterMessage(message) {
         console.log(message);
     }
     */
-
     // only parse fv arrays
     if (message['acn'] == "fv") {
         if (message['ary'][0]['txt'] != undefined && message['ary'][0]['acn'] === 'cs') {
             var text = '';
-	
+
             // check slide note for noText keyword.  If noText is defined dont step into this IF
             if (typeof message['ary'][1] !== 'undefined' && message['ary'][1]['txt'] !== config["noText"]) {
-
                 // CALL TO WORSHIP SECTION
                                                 // replace uid with the desired slide
-                if(message['ary'][1]['uid'] === "43C7A5B6-3513-4E57-8A49-3FF6C9AB3DAA"){
-                    console.log("inside call to worship slide");
+                if(message['ary'][1]['uid'] === "43C7A5B6-3513-4E57-8A49-3FF6C9AB3DAA" || message['ary'][1]['txt']==="ctw"){
+                    console.log("inside call to worship slide");              
                     text = message['ary'][0]['txt'];
                     let index = text.lastIndexOf("\r");
                     let title = text.substring(0, index);
@@ -78,12 +146,31 @@ function processProPresenterMessage(message) {
                     $("#title").html(title);
                     $("#verse").html(verse);
                     $("#cs").html("");
-                }else {
+                    $(".httpTrigger").hide();
+                    $("#lyrics").removeClass("csWBackground")
+                    $("#lyrics").addClass("csWOBackground");
+
+                    console.log("title", title )
+                    console.log("slide notes", message['ary'][1]['txt'])
+                } else if ( message['ary'][1]['txt'] === 'httpTrigger_Prayer'){
+                    triggerHTTPRequestPrayer();
+                    $(".httpTrigger").show();
+
+                } else if ( message['ary'][1]['txt'] === 'httpTrigger_Announcements'){
+                    triggerHTTPRequestAnnouncement();
+                    $(".httpTrigger").show();
+                } else {
                     // replace carriage return \r and linefeed \n with <br> global
+                    $(".httpTrigger").hide();
                     $("#title").html("");
                     $("#verse").html("");
                     text = message['ary'][0]['txt'];
                     text = editProPresenterMessage(text);
+                    console.log("text: ", text)
+
+                    $("#lyrics").addClass("csWBackground");
+                    $("#lyrics").removeClass("csWOBackground")
+
                     // if fading is true and repeated text is true
                     if (prev_text !== text || config['fade_repeated_text']) {
                         // if fading is true
@@ -114,16 +201,17 @@ function processProPresenterMessage(message) {
 
 function connectToProPresenter() {
     var proPresenterStageDisplayURL = 'ws://' + config['propresenter_ip'] + ':' + config['propresenter_port'] + '/stagedisplay';
-    
+   
     var ws = new WebSocket(proPresenterStageDisplayURL);
 
     ws.onopen = function() {
         console.log('ProPresenter connection opened');
-        ws.send(JSON.stringify({
-                                "pwd": config['propresenter_password'],
-                                "ptl": 610,
-                                "acn": "ath"
-                               }));
+        ws.send(JSON.stringify(
+        {
+            "pwd": config['propresenter_password'],
+            "ptl": 610,
+            "acn": "ath"
+        }));
     };
 
     ws.onmessage = function(e) {
@@ -150,7 +238,14 @@ connectToProPresenter();
 </head>
 
 <body>
-    <div id="cs"></div>
+    <div class="httpTrigger">
+        <div id="camera">Camera</div>
+        <div id="vmix">Vmix</div>
+    </div>
+    <div class="lyrics-content">
+       <div id="lyrics"></div>  
+       <div id="cs"></div>
+    </div>
     <div class="ctw">
         <h2 id="title"></h2>
         <p id="verse"></p>
